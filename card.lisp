@@ -26,18 +26,34 @@
          (new-card (add-legal-number-to-card n card)))
     (cond ((eql (length new-card) size)
            new-card)
-          (t (progn
-               (fill-card new-card size limit))))))
+          (t (fill-card new-card size limit)))))
 
 (defun format-card (card)
   "Groups the numbers in the card by decene"
   (let ((formatted-card '()))
-    (dotimes (i 8)
+    (dotimes (i 10)
       (let ((numbers (remove-if #'(lambda (num)
-                                    (not (eql i (floor num 10))))
+                                    (or (null num)
+                                        (not (eql i (floor num 10)))))
                                 card)))
         (push numbers formatted-card)))
     (reverse formatted-card)))
+
+(defun left-numbers (card)
+  (or (count-if #'(lambda (num)
+                    (not (null num)))
+                card)
+      0))
+
+(defun is-bingo-p (card)
+  "Checks if the card is a bingo"
+  (every #'null card))
+
+(defun try-for-number (num card)
+  "Tries to check a number from a card"
+  (if (member num card)
+    (substitute nil num card)
+    card))
 
 (defun make-card (&optional (size 15) (limit 90))
   "Creates a card, ready to be playable"
@@ -49,9 +65,9 @@
 (defun print-card (card)
   "Prints a card to the screen, formatted"
   (let ((formatted-card (format-card card)))
-    (format t "~&+-----------------------------------------------+~%")
+    (format t "~&+-----------------------------------------------------------+~%")
     (dotimes (decene-i *max-per-decene*)
       (dotimes (group-i (length formatted-card))
         (format t "| ~4S" (nth decene-i (nth group-i formatted-card))))
       (format t "|")
-      (format t "~&+-----------------------------------------------+~%"))))
+      (format t "~&+-----------------------------------------------------------+~%"))))

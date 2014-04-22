@@ -1,0 +1,27 @@
+(defun print-status (player)
+  (format t "~%~%~S~%~%" (player-name player))
+  (format t "~%~S Numbers Left" (left-numbers (player-card player)))
+  (print-card (player-card player)))
+
+(defun start-game (p1 p2)
+  (let* ((num (1+ (random 90)))
+        (p1-card (try-for-number num (player-card p1)))
+        (p2-card (try-for-number num (player-card p2))))
+    ; how should I proceed to make this more functional-like?
+     (setf (player-card p1) p1-card)
+     (setf (player-card p2) p2-card)
+    ;--
+    (format t "~&THE BOMBO GIRA...")
+    (format t "~&ITS A ~S" num)
+    (print-status p1)
+    (print-status p2)
+    (cond ((is-bingo-p p1-card)
+           (format t "~%~%~%~S WINS" (player-name p1)))
+          ((is-bingo-p p2-card)
+           (format t "~%~%~%~S WINS" (player-name p2)))
+          (t (start-game p1 p2)))))
+
+(defun start ()
+  (let ((human (make-player :name "You" :card (make-card)))
+        (computer (make-player :name "Evil Computer" :card (make-card))))
+    (start-game human computer)))
