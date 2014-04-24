@@ -10,7 +10,7 @@
 (defun is-legal-p (num card)
   "Checks if a number is legal to be added to a card"
   (let* ((decene (floor num 10))
-        (size-of-decene (size-of-decene-in-card decene card)))
+         (size-of-decene (size-of-decene-in-card decene card)))
     (and (not (member num card))
          (< size-of-decene *max-per-decene*))))
 
@@ -40,6 +40,7 @@
     (reverse formatted-card)))
 
 (defun left-numbers (card)
+  "Counts the number of numbers left on a card"
   (or (count-if #'(lambda (num)
                     (not (null num)))
                 card)

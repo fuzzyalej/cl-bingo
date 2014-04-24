@@ -1,11 +1,13 @@
 (defvar *pool*) ; Pool of numbers
 
 (defun print-status (player)
+  "Prints the status of a player on the screen"
   (format t "~%~%~S" (player-name player))
   (format t "~%~S Numbers Left" (left-numbers (player-card player)))
   (print-card (player-card player)))
 
 (defun welcome-screen (p1 p2)
+  "Shows an awesome welcome screen to the player"
   (format t "~%###########################################")
   (format t "~%##    WELCOME TO THE GREAT CASINO NIGHT  ##")
   (format t "~%###########################################")
@@ -18,9 +20,11 @@
   (print-status p2))
 
 (defun make-pool (size)
+  "Make a pool of numbers of size `size`"
   (loop for i from 1 to size collect i))
 
 (defun generate-random-number-from-pool ()
+  "Gets and deletes a random number from the pool and updates `*pool*`"
   (when (eql (length *pool*) 0)
     (format t "The pool is empty, something is very wrong...")
     (exit))
@@ -29,6 +33,7 @@
     num))
 
 (defun start-game (p1 p2)
+  "Plays one round of the game"
   (let* ((num (generate-random-number-from-pool))
          (p1-card (try-for-number num (player-card p1)))
          (p2-card (try-for-number num (player-card p2))))
@@ -50,6 +55,7 @@
           (t (start-game p1 p2)))))
 
 (defun start ()
+  "Sets up and starts the game"
   (let ((human (make-player :name "You" :card (make-card)))
         (computer (make-player :name "Evil Computer" :card (make-card))))
     (setf *pool* (make-pool 90))
